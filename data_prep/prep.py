@@ -1,5 +1,5 @@
 from data import Data
-from utils import Plot_graphs as plt 
+from utils import norm_target, scatter_plot, qq_plot 
 
 if '__main__' == __name__:
     data = Data('../csv/train.csv', '../csv/test.csv')
@@ -16,12 +16,12 @@ if '__main__' == __name__:
 
     train = data.train_del_outliers(['GrLivArea'], 'SalePrice', [4000], 300000)
 
-    plt.scatter_plot(train, ['GrLivArea'], ['SalePrice'])
+    #scatter_plot(train, ['GrLivArea'], ['SalePrice'])
 
     train['SalePrice'] = data.train_log_transform('SalePrice')
 
-    #plt.norm_target(train, 'SalePrice')
-    #plt.qq_plot(train, 'SalePrice')
+    #norm_target(train, 'SalePrice')
+    #qq_plot(train, 'SalePrice')
 
     #feature enginnering
 
