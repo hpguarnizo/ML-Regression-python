@@ -57,7 +57,6 @@ class Data:
 
     def all_data_missing(self, train, test, target, plot=False, show=False):
         all_data = pd.concat((train, test)).reset_index(drop=True)
-        all_data.drop(['SalePrice'], axis=1, inplace=True)
         
         all_data_na = (all_data.isnull().sum() / len(all_data)) * 100
         all_data_na = all_data_na.drop(all_data_na[all_data_na == 0].index).sort_values(ascending=False)[:30]
@@ -148,3 +147,10 @@ class Data:
 
     def to_csv(self, df, split='train'):
         return df.to_csv('../csv/clean_'+split+'.csv', index=False)
+
+    def check_missing_data(self, df):
+        df_na = (df.isnull().sum() / len(df)) * 100
+        df_na = df_na.drop(df_na[df_na == 0].index).sort_values(ascending=False)
+        missing_data = pd.DataFrame({'Missing Ratio' :df_na})
+        
+        return print(missing_data.head())

@@ -19,6 +19,7 @@ if '__main__' == __name__:
     #scatter_plot(train, ['GrLivArea'], ['SalePrice'])
 
     train['SalePrice'] = data.train_log_transform('SalePrice')
+    target = train['SalePrice']
 
     #norm_target(train, 'SalePrice')
     #qq_plot(train, 'SalePrice')
@@ -114,6 +115,10 @@ if '__main__' == __name__:
     all_data = data.skew_features(all_data)
 
     all_data = data.dummy_features(all_data)
+
+    all_data = data.drop_feature(['GarageYrBlt', 'GarageArea', 'GarageCars'], all_data)
+
+    data.check_missing_data(all_data)
 
     train = all_data[:ntrain]
     test = all_data[ntrain:]
