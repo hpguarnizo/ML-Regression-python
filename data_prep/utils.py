@@ -7,6 +7,8 @@ import scipy.stats as ss
 from scipy.stats import norm, skew
 
 class Plot_graphs():
+    def __init__(self):
+        pass
 
     def scatter_plot(self, df, column1, column2):
         fig, ax = plt.subplots()

@@ -16,7 +16,7 @@ if '__main__' == __name__:
 
     train = data.train_del_outliers(['GrLivArea'], 'SalePrice', [4000], 300000)
 
-    #plt.scatter_plot(train, ['GrLivArea'], ['SalePrice'])
+    plt.scatter_plot(train, ['GrLivArea'], ['SalePrice'])
 
     train['SalePrice'] = data.train_log_transform('SalePrice')
 
