@@ -9,6 +9,8 @@ from scipy.special import boxcox1p
 
 from sklearn.preprocessing import LabelEncoder
 
+from utils import plot_miss_val
+
 class Data:
     def __init__(self, train_path, test_path):
         self.train = pd.read_csv(train_path)
@@ -63,14 +65,7 @@ class Data:
         
 
         if plot:
-            fig, ax = plt.subplots(figsize=(15, 12))
-            plt.xticks(rotation='90')
-            sns.set(); np.random.seed(0)
-            ax = sns.barplot(x=all_data_na.index, y=all_data_na)
-            plt.xlabel('Features', fontsize=15)
-            plt.ylabel('Percent of missing values', fontsize=15)
-            plt.title('Percent missing data by feature', fontsize=15)
-            plt.show()
+            plot_miss_val(all_data_na)
         
         if show:
             print(missing_data.head(20))

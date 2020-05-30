@@ -1,5 +1,5 @@
 from data import Data
-from utils import norm_target, scatter_plot, qq_plot, data_corr
+from utils import norm_target, scatter_plot, qq_plot 
 
 if '__main__' == __name__:
     data = Data('../csv/train.csv', '../csv/test.csv')
@@ -16,7 +16,7 @@ if '__main__' == __name__:
 
     train = data.train_del_outliers(['GrLivArea'], 'SalePrice', [4000], 300000)
 
-    #scatter_plot(train, 'GrLivArea', 'SalePrice')
+    #scatter_plot(train, ['GrLivArea'], ['SalePrice'])
 
     train['SalePrice'] = data.train_log_transform('SalePrice')
 
@@ -120,4 +120,7 @@ if '__main__' == __name__:
 
     data.to_csv(train)
     data.to_csv(test, split='test')
+
+    #data.train_disp()
+    #data.test_disp()
 
