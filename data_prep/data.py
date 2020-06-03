@@ -10,6 +10,7 @@ from scipy.special import boxcox1p
 from sklearn.preprocessing import LabelEncoder
 
 from utils import plot_miss_val
+from utils import norm_target, scatter_plot, qq_plot
 
 class Data:
     def __init__(self, train_path, test_path):
@@ -42,34 +43,40 @@ class Data:
         
         return test_ID
 
-    def train_del_outliers(self, column1_set, column2, x_lim_set, y_lim):
+    def train_del_outliers(self, column1_set, column2, x_lim_set, y_lim, plot=False):
         for column1 in column1_set:
             for x_lim in x_lim_set:
                 self.train.drop(self.train[(self.train[column1]>x_lim) & (self.train[column2]<y_lim)].index, inplace=True)
 
+        if plot:
+            scatter_plot(train, [column1], [column2])
+
         return self.train
 
-    def train_log_transform(self, target):
-        return np.log1p(self.train[target])
+    def train_log_transform(self, target, plot=False):
+        ds = np.log1p(self.train[target])
+
+        if plot:
+            norm_target(train, target)
+            qq_plot(train, target)
+        
+        return ds
 
     def target(self, df, target):
         return df[target].values
 
-    def all_data_missing(self, train, test, target, plot=False, show=False):
-        all_data = pd.concat((train, test)).reset_index(drop=True)
-        
-        all_data_na = (all_data.isnull().sum() / len(all_data)) * 100
+    def all_data_missing(self, ds, plot=False, show=False):
+        all_data_na = (ds.isnull().sum() / len(ds)) * 100
         all_data_na = all_data_na.drop(all_data_na[all_data_na == 0].index).sort_values(ascending=False)[:30]
         missing_data = pd.DataFrame({'Missing Ratio' :all_data_na})
         
-
         if plot:
             plot_miss_val(all_data_na)
         
         if show:
             print(missing_data.head(20))
 
-        return all_data, missing_data
+        return ds, missing_data
 
     def fill_na(self, missing_data, df):
         for col in missing_data:
@@ -138,15 +145,16 @@ class Data:
             #df[feat] += 1
             df[feat] = boxcox1p(df[feat], lam)
 
-        #all_data[skewed_features] = np.log1p(all_data[skewed_features])
+        #df[skewed_features] = np.log1p(all_data[skewed_features])
 
         return df
 
     def dummy_features(self, df):
         return pd.get_dummies(df)
 
-    def to_csv(self, df, split='train'):
-        return df.to_csv('../csv/clean_'+split+'.csv', index=False)
+    def to_csv(self, df, index, split='train'):
+        index.append(df, ignore_index=True)
+        return index.to_csv('../csv/clean_'+split+'.csv', index=False)
 
     def check_missing_data(self, df):
         df_na = (df.isnull().sum() / len(df)) * 100

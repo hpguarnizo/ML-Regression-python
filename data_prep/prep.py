@@ -1,5 +1,5 @@
-from data import Data
-from utils import norm_target, scatter_plot, qq_plot 
+from data import Data 
+from utils import data_corr
 
 if '__main__' == __name__:
     data = Data('../csv/train.csv', '../csv/test.csv')
@@ -16,115 +16,150 @@ if '__main__' == __name__:
 
     train = data.train_del_outliers(['GrLivArea'], 'SalePrice', [4000], 300000)
 
-    #scatter_plot(train, ['GrLivArea'], ['SalePrice'])
-
     train['SalePrice'] = data.train_log_transform('SalePrice')
     target = train['SalePrice']
 
-    #norm_target(train, 'SalePrice')
-    #qq_plot(train, 'SalePrice')
-
     #feature enginnering
 
-    all_data, missing_data = data.all_data_missing(train, test, 'SalePrice')
+    train, missing_data_train = data.all_data_missing(train)
+    test, missing_data_test = data.all_data_missing(test)
 
     #data_corr(train)
 
-    all_data = data.fill_na(['PoolQC', 
-                            'MiscFeature', 
-                            'Alley', 
-                            'Fence',
-                            'FireplaceQu',
-                            'GarageType', 
-                            'GarageFinish', 
-                            'GarageQual', 
-                            'GarageCond',
-                            'BsmtQual', 
-                            'BsmtCond', 
-                            'BsmtExposure', 
-                            'BsmtFinType1', 
-                            'BsmtFinType2',
-                            'MasVnrType',
-                            'MSSubClass' ],
-                            all_data)
+    missing_data_nan = ['PoolQC', 
+                          'MiscFeature', 
+                          'Alley', 
+                          'Fence',
+                          'FireplaceQu',
+                          'GarageType', 
+                          'GarageFinish', 
+                          'GarageQual', 
+                          'GarageCond',
+                          'BsmtQual', 
+                          'BsmtCond', 
+                          'BsmtExposure', 
+                          'BsmtFinType1', 
+                          'BsmtFinType2',
+                          'MasVnrType',
+                          'MSSubClass' ]
 
-    all_data = data.fill_zero(['GarageType', 
-                               'GarageFinish', 
-                               'GarageQual', 
-                               'GarageCond',
-                               'BsmtFinSF1', 
-                               'BsmtFinSF2', 
-                               'BsmtUnfSF',
-                               'TotalBsmtSF', 
-                               'BsmtFullBath', 
-                               'BsmtHalfBath',
-                               'MasVnrArea'],
-                               all_data)
-
-    all_data = data.fill_most_frequent(['MSZoning',
-                                        'Electrical',
-                                        'KitchenQual',
-                                        'Exterior1st',
-                                        'Exterior2nd',
-                                        'SaleType'],
-                                        all_data)
-
-    all_data = data.group_by(all_data, 'LotFrontage', 'Neighborhood')
-
-    all_data = data.data_replace('Functional', 'Typ', all_data)
-
-    all_data = data.drop_feature(['Utilities'], all_data)
-
-    all_data = data.transform_num_cat(['MSSubClass', 
-                                       'OverallCond',
-                                       'YrSold',
-                                       'MoSold' ],
-                                       all_data)
-
-    all_data = data.label_encoding(['FireplaceQu', 
-                                    'BsmtQual', 
-                                    'BsmtCond', 
-                                    'GarageQual', 
-                                    'GarageCond', 
-                                    'ExterQual', 
-                                    'ExterCond',
-                                    'HeatingQC', 
-                                    'PoolQC', 
-                                    'KitchenQual', 
-                                    'BsmtFinType1', 
-                                    'BsmtFinType2', 
-                                    'Functional', 
-                                    'Fence', 
-                                    'BsmtExposure', 
-                                    'GarageFinish', 
-                                    'LandSlope',
-                                    'LotShape', 
-                                    'PavedDrive', 
-                                    'Street', 
-                                    'Alley', 
-                                    'CentralAir', 
-                                    'MSSubClass', 
-                                    'OverallCond', 
-                                    'YrSold', 
-                                    'MoSold'],
-                                    all_data)
+    missing_data_zero = ['GarageType', 
+                         'GarageFinish', 
+                         'GarageQual', 
+                         'GarageCond',
+                         'BsmtFinSF1', 
+                         'BsmtFinSF2', 
+                         'BsmtUnfSF',
+                         'TotalBsmtSF', 
+                         'BsmtFullBath', 
+                         'BsmtHalfBath',
+                         'MasVnrArea']
     
+    missing_data_non_present = ['MSZoning',
+                                'Electrical',
+                                'KitchenQual',
+                                'Exterior1st',
+                                'Exterior2nd',
+                                'SaleType']
 
-    all_data['TotalSF'] = all_data['TotalBsmtSF'] + all_data['1stFlrSF'] + all_data['2ndFlrSF']
+    data_num_cat = ['MSSubClass', 
+                    'OverallCond',
+                    'YrSold',
+                    'MoSold' ]
+
+    data_label_encod = ['FireplaceQu', 
+                        'BsmtQual', 
+                        'BsmtCond', 
+                        'GarageQual', 
+                        'GarageCond', 
+                        'ExterQual', 
+                        'ExterCond',
+                        'HeatingQC', 
+                        'PoolQC', 
+                        'KitchenQual', 
+                        'BsmtFinType1', 
+                        'BsmtFinType2', 
+                        'Functional', 
+                        'Fence', 
+                        'BsmtExposure', 
+                        'GarageFinish', 
+                        'LandSlope',
+                        'LotShape', 
+                        'PavedDrive', 
+                        'Street', 
+                        'Alley', 
+                        'CentralAir', 
+                        'MSSubClass', 
+                        'OverallCond', 
+                        'YrSold', 
+                        'MoSold']
+
+    data_drop_feature = ['GarageYrBlt', 'GarageArea', 'GarageCars']
+
+    train = data.fill_na(missing_data_nan,
+                           train)
     
-    all_data = data.skew_features(all_data)
+    test = data.fill_na(missing_data_nan,
+                           test)
 
-    all_data = data.dummy_features(all_data)
+    train = data.fill_zero(missing_data_zero,
+                              train)
 
-    all_data = data.drop_feature(['GarageYrBlt', 'GarageArea', 'GarageCars'], all_data)
+    test = data.fill_zero(missing_data_zero,
+                              test)
 
-    data.check_missing_data(all_data)
+    train = data.fill_most_frequent(missing_data_non_present,
+                                       train)
 
-    train = all_data[:ntrain]
-    test = all_data[ntrain:]
+    test = data.fill_most_frequent(missing_data_non_present,
+                                       test)
 
-    data.to_csv(train)
-    data.to_csv(test, split='test')
+    train = data.group_by(train, 'LotFrontage', 'Neighborhood')
+
+    test = data.group_by(test, 'LotFrontage', 'Neighborhood')
+
+    train = data.data_replace('Functional', 'Typ', train)
+
+    test = data.data_replace('Functional', 'Typ', test)
+
+    train = data.drop_feature(['Utilities'], train)
+
+    test = data.drop_feature(['Utilities'], test)
+
+    train = data.transform_num_cat(data_num_cat,
+                                      train)
+
+    test = data.transform_num_cat(data_num_cat,
+                                      test)
+
+    train = data.label_encoding(data_label_encod,
+                                    train)
+    
+    test = data.label_encoding(data_label_encod,
+                                    test)
+
+    train['TotalSF'] = train['TotalBsmtSF'] + train['1stFlrSF'] + train['2ndFlrSF']
+
+    test['TotalSF'] = test['TotalBsmtSF'] + test['1stFlrSF'] + test['2ndFlrSF']
+    
+    train = data.skew_features(train)
+
+    test = data.skew_features(test)
+
+    train = data.dummy_features(train)
+
+    test = data.dummy_features(test)
+
+    train = data.drop_feature(data_drop_feature, train)
+
+    test = data.drop_feature(data_drop_feature, test)
+
+    data.check_missing_data(train)
+
+    data.check_missing_data(test)
+
+    data.to_csv(train, train_id)
+    data.to_csv(test, test_id, split='test')
 
     #data.train_disp()
     #data.test_disp()
