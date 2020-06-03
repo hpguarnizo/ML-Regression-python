@@ -152,9 +152,15 @@ class Data:
     def dummy_features(self, df):
         return pd.get_dummies(df)
 
-    def to_csv(self, df, index, split='train'):
-        index.append(df, ignore_index=True)
-        return index.to_csv('../csv/clean_'+split+'.csv', index=False)
+    def to_csv(self, df_train, df_test, index, split='train'):
+        if split == 'train':
+          drop_col = [list(df_train.columns)[i] for i in range(len(list(df_train.columns))-1) if list(df_train.columns)[i] not in df_test.columns and list(df_train.columns)[i] != 'SalePrice'] 
+          df = df_train.drop(drop_col, axis=1)
+         # print(df.head())
+        else:
+          df = df_test
+         # print(df.head())  
+        return df.to_csv('../csv/clean_'+split+'.csv', index=False)
 
     def check_missing_data(self, df):
         df_na = (df.isnull().sum() / len(df)) * 100
