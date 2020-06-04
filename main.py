@@ -10,6 +10,5 @@ if __name__=='__main__':
     test = utils.load_data('./csv/clean_test.csv')
 
     X, y = utils.features_target(train, ['SalePrice'], ['SalePrice'])
-    best_model, best_score = models.grid_training(X,y)
+    best_model = models.grid_training(X,y,'ELASTIC_NET')
     print(best_model)
-    print(best_score)
