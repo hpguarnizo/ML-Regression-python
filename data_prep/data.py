@@ -154,12 +154,16 @@ class Data:
 
     def to_csv(self, df_train, df_test, index, split='train'):
         if split == 'train':
-          drop_col = [list(df_train.columns)[i] for i in range(len(list(df_train.columns))-1) if list(df_train.columns)[i] not in df_test.columns and list(df_train.columns)[i] != 'SalePrice'] 
-          df = df_train.drop(drop_col, axis=1)
-         # print(df.head())
+            drop_col = [list(df_train.columns)[i] for i in range(len(list(df_train.columns))-1) if list(df_train.columns)[i] not in df_test.columns and list(df_train.columns)[i] != 'SalePrice'] 
+            df = df_train.drop(drop_col, axis=1)
+            #df = df_train
+            df = pd.concat([index, df], axis=1)
+            self.check_missing_data(df)
+            #print(df.head())
         else:
-          df = df_test
-         # print(df.head())  
+            df = df_test
+            df = pd.concat([index, df], axis=1)
+            #print(df.head())  
         return df.to_csv('../csv/clean_'+split+'.csv', index=False)
 
     def check_missing_data(self, df):
@@ -167,4 +171,4 @@ class Data:
         df_na = df_na.drop(df_na[df_na == 0].index).sort_values(ascending=False)
         missing_data = pd.DataFrame({'Missing Ratio' :df_na})
         
-        return print(missing_data.head())
+        return print(missing_data)

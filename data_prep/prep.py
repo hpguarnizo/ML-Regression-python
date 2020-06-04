@@ -161,5 +161,5 @@ if '__main__' == __name__:
     data.to_csv(train, test, train_id)
     data.to_csv(train, test, test_id, split='test')
 
-    #print([list(train.columns)[i] for i in range(len(list(train.columns))-1) if list(train.columns)[i] not in test.columns])
+    
 
