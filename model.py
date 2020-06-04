@@ -26,13 +26,6 @@ def rmsle_cv(model, n_folds, train_ds, target):
     return(rmse)
 
 
-#Modelos base más robustos a valores atipicos, usando robust scaler: Lasso y ElasticNet. TODO
-def robust_model(models):
-    pass
-        
-
-
-
 class Models:
     def __init__(self):
         self.reg = {
@@ -84,9 +77,12 @@ class Models:
 
         grid_reg = GridSearchCV(reg_dic, self.params[name], cv=3)
         grid_reg.fit(X, y.values.ravel())
-        score = np.abs(grid_reg.best_score_)
 
-        best_model = grid_reg.best_estimator_
+        #Modelos base más robustos a valores atipicos, usando robust scaler: Lasso y ElasticNet. 
+        if name == 'ELASTIC_NET' or name == 'LASSO': 
+            best_model = make_pipeline(RobustScaler(), grid_reg.best_estimator_)
+        else:
+            best_model = grid_reg.best_estimator_
 
         return best_model
 
