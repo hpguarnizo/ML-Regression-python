@@ -156,13 +156,12 @@ class Data:
         if split == 'train':
             drop_col = [list(df_train.columns)[i] for i in range(len(list(df_train.columns))-1) if list(df_train.columns)[i] not in df_test.columns and list(df_train.columns)[i] != 'SalePrice'] 
             df = df_train.drop(drop_col, axis=1)
-            #df = df_train
-            df = pd.concat([index, df], axis=1)
             self.check_missing_data(df)
             #print(df.head())
         else:
             df = df_test
             df = pd.concat([index, df], axis=1)
+            self.check_missing_data(df)
             #print(df.head())  
         return df.to_csv('../csv/clean_'+split+'.csv', index=False)
 

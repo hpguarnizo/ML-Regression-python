@@ -14,16 +14,8 @@ import xgboost as xgb
 import lightgbm as lgb
 from sklearn.model_selection import GridSearchCV
 
-#Función de validación
-def rmsle_cv(model, n_folds, train_ds, target):
-    """Para las aproximaciones de regresión, cross_val_score añadiendo una línea de codigo que mezcle los datos """
-    kf = KFold(n_folds, shuffle=True, random_state=0).get_n_splits(train_ds.values) #Línea de codigo que mezcla los datos
-    rmse= np.sqrt(-cross_val_score(model, 
-                                   train_ds.values, 
-                                   target, 
-                                   scoring="neg_mean_squared_error", 
-                                   cv = kf))
-    return(rmse)
+import warnings
+warnings.filterwarnings("ignore")
 
 
 class Models:
@@ -90,10 +82,11 @@ class Models:
 class AveragingModels(BaseEstimator, RegressorMixin, TransformerMixin):
     def __init__(self, models):
         self.models = models
-        
+        self.models_ = [clone(x) for x in self.models]
+
     # we define clones of the original models to fit the data in
     def fit(self, X, y):
-        self.models_ = [clone(x) for x in self.models]
+        #self.models_ = [clone(x) for x in self.models]
         
         # Train cloned base models
         for model in self.models_:

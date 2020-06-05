@@ -18,6 +18,7 @@ if '__main__' == __name__:
 
     train['SalePrice'] = data.train_log_transform('SalePrice')
     target = train['SalePrice']
+    train.drop('SalePrice', axis=1, inplace=True)
 
     #feature enginnering
 
@@ -154,12 +155,10 @@ if '__main__' == __name__:
 
     test = data.drop_feature(data_drop_feature, test)
 
-    data.check_missing_data(train)
-
-    data.check_missing_data(test)
-
     data.to_csv(train, test, train_id)
     data.to_csv(train, test, test_id, split='test')
+
+    target.to_csv('../csv/target.csv', index=False)
 
     
 
