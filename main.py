@@ -1,5 +1,5 @@
 from utils import Utils
-from model import Models, AveragingModels, StackingAveragedModels
+from model import Models, AveragingModels
 import pandas as pd
 import numpy as np
 
@@ -41,7 +41,7 @@ if __name__=='__main__':
 
     print(" xgb score: {:.4f}".format(utils.rmsle(y, xgb_pred_train)))
 
-    enssemble = pred*0.7 + xgb_pred*0.3
+    enssemble = pred*0.6 + xgb_pred*0.3
 
     sub = utils.make_sub(enssemble, test_id)
     print(sub.describe())
