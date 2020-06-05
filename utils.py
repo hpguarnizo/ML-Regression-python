@@ -1,16 +1,12 @@
 import pandas as pd 
 from sklearn.model_selection import KFold, cross_val_score
+from sklearn.metrics import mean_squared_error
 import numpy as np 
 
 
 class Utils():
     def load_data(self, path):
         return pd.read_csv(path)
-
-    def features_target(self, ds, dropcols, y):
-        X = ds.drop(dropcols, axis=1)
-        y = ds[y]
-        return X, y
 
     #Función de validación
     def rmsle_cv(self, model, n_folds, train_ds, target):
@@ -23,6 +19,8 @@ class Utils():
                                     cv = kf))
         return(rmse)
 
+    def rmsle(self, y, y_pred):
+        return np.sqrt(mean_squared_error(y, y_pred))
 
     def make_sub(self, prediction, index):
         sub = pd.DataFrame()

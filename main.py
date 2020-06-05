@@ -1,6 +1,7 @@
 from utils import Utils
-from model import Models, AveragingModels
+from model import Models, AveragingModels, StackingAveragedModels
 import pandas as pd
+import numpy as np
 
 if __name__=='__main__':
     utils = Utils()
@@ -33,7 +34,16 @@ if __name__=='__main__':
     averaged_models.fit(X, y)
     pred = averaged_models.predict(test)
 
-    sub = utils.make_sub(pred, test_id)
+    xgb = base_models[4]
+    xgb.fit(X, y)
+    xgb_pred_train = xgb.predict(X)
+    xgb_pred = xgb.predict(test)
+
+    print(" xgb score: {:.4f}".format(utils.rmsle(y, xgb_pred_train)))
+
+    enssemble = pred*0.7 + xgb_pred*0.3
+
+    sub = utils.make_sub(enssemble, test_id)
     print(sub.describe())
 
     sub.to_csv('./csv/submission.csv', index=False)
