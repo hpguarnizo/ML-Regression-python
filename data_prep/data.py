@@ -8,6 +8,7 @@ from scipy.stats import norm, skew
 from scipy.special import boxcox1p
 
 from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import StandardScaler
 
 from utils import plot_miss_val
 from utils import norm_target, scatter_plot, qq_plot
@@ -171,3 +172,12 @@ class Data:
         missing_data = pd.DataFrame({'Missing Ratio' :df_na})
         
         return print(missing_data)
+
+    def scaler(self, ds, verbose=False):
+        scaler = StandardScaler()
+        scaler.fit(ds)
+        if verbose:
+            print(scaler.mean_)
+            print(scaler.scale_)
+        
+        return scaler.transform(ds)
