@@ -6,7 +6,7 @@ Este trabajo es creative commons, puedes usarlo, distribuirlo sin preocupación.
 
 ## Introducción
 
-Este es un repositorio con API's que buscan automatizar el analisis de datos. A la fecha cuenta con dos modulos principales.
+Este es un repositorio con scriots que buscan automatizar el analisis de datos. A la fecha cuenta con dos modulos principales.
 
 * Data_prep: El modulo de preparación de datos, en este se encunetran dos submodulos: utils y data.
 En utils se encuentran todas las funciones para graficar los datos y en data las clases para limpiarlos y realizar ingeniería de caracteristicas. Ambos se ejecutan sobre el script prep.py
