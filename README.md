@@ -6,16 +6,14 @@ Este trabajo es creative commons, puedes usarlo, distribuirlo sin preocupación.
 
 ## Introducción
 
-Este es un repositorio con scriots que buscan automatizar el analisis de datos. A la fecha cuenta con dos modulos principales.
+Este es un repositorio con scripts que buscan automatizar el analisis de datos. A la fecha cuenta con dos modulos principales.
 
-* Data_prep: El modulo de preparación de datos, en este se encunetran dos submodulos: utils y data.
+* Data_prep: El modulo de preparación de datos, en este se encuentran dos submodulos: utils y data.
 En utils se encuentran todas las funciones para graficar los datos y en data las clases para limpiarlos y realizar ingeniería de caracteristicas. Ambos se ejecutan sobre el script prep.py
 
 * Main: Es el modulo principal. En este se ejecutan los modelos de Machine Learning. En este momento las clases están orientadas a problemas de regressión, se enfoca en enssemble de hombre pobre, manuales pero con resultados superiores a los clasicos.
 
 Usa como dataset el Ames Dataset House Prices: Advance Regression Techniques
-
-Si lo usas por favor citame en tus bibliografias. Si identificas mejoras, hazme un pull request y entre todos hagamos una herramienta robusta para mejorar el trabajo de todos.
 
 ### Bibliografia
 
